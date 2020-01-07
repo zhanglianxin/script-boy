@@ -56,7 +56,7 @@
             for (let o of arr) {
                 let row = [];
                 for (let field of fields) {
-                    row.push(o[field]);
+                    row.push(`"${ ('' + o[field]).replace(/\"/g, '""') }"`);
                 }
                 data += row.join(',') + '\n';
             }

@@ -73,17 +73,35 @@
         a.download = filename;
         let b;
         if (filename.endsWith('.json')) {
-            b = new Blob([jsonStr(content)], {
-                type: 'application/json',
-            });
         } else if (filename.endsWith('.csv')) {
-            b = new Blob([csvStr(content)], {
-                type: 'text/csv',
-            });
         } else if (filename.endsWith('.md')) {
-            b = new Blob([mdStr(content)], {
-                type: 'text/plain',
-            });
+        }
+        let found = filename.match(/\.\w{1,4}$/);
+        if (!found) {
+            return;
+        }
+        switch (found[0]) {
+            case '.json':
+                b = new Blob([jsonStr(content)], {
+                    type: 'application/json',
+                });
+                break;
+            case '.csv':
+                b = new Blob([csvStr(content)], {
+                    type: 'text/csv',
+                });
+                break;
+            case '.md':
+                b = new Blob([mdStr(content)], {
+                    type: 'text/plain',
+                });
+                break;
+            default:
+                console.error('unsupported filetype');
+                break;
+        }
+        if (!b) {
+            return;
         }
         a.href = URL.createObjectURL(b);
         a.click();
